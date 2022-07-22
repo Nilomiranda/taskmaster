@@ -4,7 +4,7 @@
   "scripts": {
     "build": "remix build",
     "deploy": "fly deploy --remote-only",
-    "dev": "remix dev",
+    "dev": "PORT=4000 remix dev",
     "start": "remix-serve build"
   },
   "dependencies": {
