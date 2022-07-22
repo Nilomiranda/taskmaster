@@ -2,7 +2,7 @@ import { Button, Heading, Input, Text, VStack } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
 import Centered from "~/components/layout/Centered";
 
-export default function Login() {
+export default function SignUp() {
     return (
         <Centered>
             <VStack mb="5rem">
@@ -11,14 +11,15 @@ export default function Login() {
             </VStack>
 
             <VStack as="form" align="stretch" spacing="2rem" padding="1rem" width="100%" maxWidth="400px">
-                <Text align="center" fontSize="xl">Login</Text>
+                <Text align="center" fontSize="xl">Sign up</Text>
 
                 <Input placeholder="Email" type="email" />
                 <Input placeholder="Password" type="password" />
+                <Input placeholder="Confirm password" type="password" />
 
                 <Button type="submit">Create account</Button>
 
-                <Text>Don't have an account? <Link to="/signup">Create one</Link></Text>
+                <Text>Already have an account? <Link to="/login">Login</Link></Text>
             </VStack>
         </Centered>
     )
