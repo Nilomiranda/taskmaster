@@ -12,6 +12,7 @@ import {
 import { MetaFunction, LinksFunction } from '@remix-run/node' // Depends on the runtime you choose
 
 import { ServerStyleContext, ClientStyleContext } from './context'
+import theme from './theme'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -80,7 +81,7 @@ const Document = withEmotionCache(
 export default function App() {
   return (
     <Document>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <Outlet />
       </ChakraProvider>
     </Document>
