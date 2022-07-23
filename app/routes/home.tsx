@@ -1,10 +1,10 @@
 import { Outlet } from "@remix-run/react";
-import VerticalNabBar from "~/components/layout/VerticalNavBar";
+import Dashboard from "~/components/layout/Dashboard";
 
 export default function HomePage() {
     return (
-        <VerticalNabBar>
+        <Dashboard>
             <Outlet />
-        </VerticalNabBar>
+        </Dashboard>
     )
 }

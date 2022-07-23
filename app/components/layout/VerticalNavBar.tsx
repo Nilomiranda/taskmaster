@@ -1,9 +1,8 @@
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { Link } from "react-router-dom";
 import VerticalNavBarLinkItem from "./VerticalNavBarLinkItem";
 
-export default function VerticalNabBar({ children }: { children: ReactNode }) {
+export default function VerticalNabBar() {
     return (
         <HStack align="start">
             <VStack as="nav" spacing="1rem" background="gray.900" height="100vh" px="2rem" py="1rem">
@@ -16,9 +15,6 @@ export default function VerticalNabBar({ children }: { children: ReactNode }) {
                 <VerticalNavBarLinkItem link="tasks" label="My tasks" />
                 <VerticalNavBarLinkItem link="completed-tasks" label="Completed tasks" />
             </VStack>
-            <Box p="2rem">
-                {children} 
-            </Box>
         </HStack>
     )
 }
