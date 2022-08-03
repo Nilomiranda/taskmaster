@@ -2,7 +2,7 @@ import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import VerticalNavBarLinkItem from "./VerticalNavBarLinkItem";
 
-export default function VerticalNabBar() {
+export default function VerticalNavBar() {
     return (
         <HStack align="start">
             <VStack as="nav" spacing="1rem" background="gray.900" height="100vh" px="2rem" py="1rem">
