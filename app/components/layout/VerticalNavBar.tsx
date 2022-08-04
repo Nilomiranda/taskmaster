@@ -1,14 +1,19 @@
 import { HStack, StackDivider, Text, VStack } from "@chakra-ui/react";
 import VerticalNavBarLinkItem from "./VerticalNavBarLinkItem";
 
-const linksGroups = [
+interface VerticalNavigationLink {
+    path: string;
+    label: string;
+}
+
+const linksGroups: VerticalNavigationLink[][] = [
     [
-        { link: '/home/tasks', label: 'My tasks' },
-        { link: '/home/completed-tasks', label: 'Completed tasks' },
+        { path: '/home/tasks', label: 'My tasks' },
+        { path: '/home/completed-tasks', label: 'Completed tasks' },
     ],
 
     [
-        { link: '/home/personas', label: 'Personas' },
+        { path: '/home/personas', label: 'Personas' },
     ],
 ]
 
@@ -25,10 +30,10 @@ export default function VerticalNavBar() {
                 <VStack alignItems="stretch" spacing="1.5rem" divider={<StackDivider borderColor='blue.900' width="100%" />}>
                     {
                         linksGroups.map((groupLink, index) => (
-                            <VStack alignItems="stretch" width="100%">
+                            <VStack alignItems="stretch" width="100%" key={index}>
                                 {groupLink.map((link, linkIndex) => (
-                                    <VStack>
-                                        <VerticalNavBarLinkItem link={link.link} label={link.label} />
+                                    <VStack key={linkIndex}>
+                                        <VerticalNavBarLinkItem link={link.path} label={link.label} />
                                     </VStack>
                                 ))}
                             </VStack>
