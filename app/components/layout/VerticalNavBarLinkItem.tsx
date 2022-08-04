@@ -11,7 +11,7 @@ interface VerticalNavBarLinkItemProps {
 
 export default function VerticalNavBarLinkItem({ link, label }: VerticalNavBarLinkItemProps) {
     return (
-        <Box w="100%" _hover={{ background: 'gray.700' }} px="1.5rem" py="0.25rem">
+        <Box w="100%" _hover={{ background: 'gray.700' }} px="1.5rem" py="0.25rem" borderRadius="0.25rem">
             <Link style={linkStyles} to={link}>{label}</Link>
         </Box>
     )
