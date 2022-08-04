@@ -61,21 +61,20 @@ export default function TaskItem({ task }: TaskItemProps) {
                     }
                 </HStack>
             </VStack>
+
             <Modal isOpen={isTaskModalOpen} onClose={handleTaskModalClosed}>
                 <ModalOverlay />
                 <ModalContent>
-                <ModalHeader>Modal Title</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <Text>Hi, this is the content for the modal</Text>
-                </ModalBody>
+                    <ModalCloseButton />
 
-                <ModalFooter>
-                    <Button mr={3} onClick={handleTaskModalClosed}>
-                    Close
-                    </Button>
-                    <Button variant='ghost'>Secondary Action</Button>
-                </ModalFooter>
+                    <ModalHeader>{name}</ModalHeader>
+
+                    <ModalBody>
+                        <VStack width="100%" alignItems="start" mb="2rem">
+                            <Tag color={mapStatusToTagColor[status].color as string} backgroundColor={mapStatusToTagColor[status].background as string} textTransform="capitalize">{mapStatusToTagColor[status].icon} {status}</Tag>
+                        </VStack>
+                        <Text>{description}</Text>
+                    </ModalBody>
                 </ModalContent>
             </Modal>
         </>
