@@ -17,7 +17,7 @@ export default function TaskItem({ task }: TaskItemProps) {
     const { tags = [], name, description, status } = task;
 
     return (
-        <VStack alignItems="start" px="1rem" py="1.5rem" width="100%" backgroundColor="gray.900" borderRadius="0.25rem">
+        <VStack alignItems="start" px="1rem" py="1.5rem" width="100%" backgroundColor="gray.900" borderRadius="0.25rem" cursor="pointer" _hover={{ backgroundColor: 'gray.700' }}>
             <HStack>
                 <Text fontSize="1rem">{name}</Text>
                 <Tag color={mapStatusToTagColor[status].color as string} backgroundColor={mapStatusToTagColor[status].background as string} textTransform="capitalize">{mapStatusToTagColor[status].icon} {status}</Tag>
