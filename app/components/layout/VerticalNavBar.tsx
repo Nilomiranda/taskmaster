@@ -12,8 +12,8 @@ export default function VerticalNavBar() {
                 </VStack>
                 <br />
 
-                <VerticalNavBarLinkItem link="tasks" label="My tasks" />
-                <VerticalNavBarLinkItem link="completed-tasks" label="Completed tasks" />
+                <VerticalNavBarLinkItem link="/home/tasks" label="My tasks" />
+                <VerticalNavBarLinkItem link="/home/completed-tasks" label="Completed tasks" />
             </VStack>
         </HStack>
     )
