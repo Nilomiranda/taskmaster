@@ -40,9 +40,6 @@ export default function VerticalNavBar() {
                         ))
                     }
                 </VStack>
-
-                {/* <VerticalNavBarLinkItem link="/home/tasks" label="My tasks" />
-                <VerticalNavBarLinkItem link="/home/completed-tasks" label="Completed tasks" /> */}
             </VStack>
         </HStack>
     )
