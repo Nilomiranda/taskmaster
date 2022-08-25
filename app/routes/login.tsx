@@ -1,5 +1,6 @@
-import { Button, Heading, Input, Text, VStack } from "@chakra-ui/react";
+import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { Link } from "@remix-run/react";
+import Input from "~/components/form/Input";
 import Centered from "~/components/layout/Centered";
 
 export default function Login() {
@@ -13,10 +14,10 @@ export default function Login() {
             <VStack as="form" align="stretch" spacing="2rem" padding="1rem" width="100%" maxWidth="400px">
                 <Text align="center" fontSize="xl">Login</Text>
 
-                <Input placeholder="Email" type="email" />
-                <Input placeholder="Password" type="password" />
+                <Input type="email" label="Email" placeholder="name@example.com" />
+                <Input type="email" label="Password" placeholder="******" />
 
-                <Button type="submit">Create account</Button>
+                <Button type="submit">Login</Button>
 
                 <Text>Don't have an account? <Link to="/signup">Create one</Link></Text>
             </VStack>
