@@ -9,14 +9,14 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
-import { MetaFunction, LinksFunction } from '@remix-run/node' // Depends on the runtime you choose
+import type { MetaFunction, LinksFunction } from '@remix-run/node' // Depends on the runtime you choose
 
 import { ServerStyleContext, ClientStyleContext } from './context'
 import theme from './theme'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
-  title: 'New Remix App',
+  title: 'Taskmaster',
   viewport: 'width=device-width,initial-scale=1',
 });
 
@@ -52,7 +52,7 @@ const Document = withEmotionCache(
       });
       // reset cache to reapply global styles
       clientStyleData?.reset();
-    }, []);
+    }, [clientStyleData, emotionCache.sheet]);
 
     return (
       <html lang="en">
