@@ -1,11 +1,11 @@
 import { Button, Heading, Text, VStack } from "@chakra-ui/react";
-import { Link, Form } from "@remix-run/react";
+import { Link, Form, useSubmit } from "@remix-run/react";
 import Input from "~/components/form/Input";
 import Centered from "~/components/layout/Centered";
-import type {ActionArgs} from "@remix-run/node";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import type {ActionArgs} from "@remix-run/node";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -15,21 +15,24 @@ const validationSchema = yup.object().shape({
     return this.parent.password === value;
   })
 })
-// export async function action({ request }: ActionArgs) {
-//   const form = await request.formData();
-//   const [name, email, password, passwordConfirmation] = ['name', 'email', 'password', 'passwordConfirmation'].map(formFieldName => form.get(formFieldName));
-//
-// console.log({ name, email, password, passwordConfirmation})
-//
-//   return null;
-// }
+export async function action({ request }: ActionArgs) {
+  const form = await request.formData();
+  const [name, email, password, passwordConfirmation] = ['name', 'email', 'password', 'passwordConfirmation'].map(formFieldName => form.get(formFieldName));
+
+console.log('inside action', { name, email, password, passwordConfirmation})
+
+  return null;
+}
 export default function SignUp() {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(validationSchema)
   });
 
-  const onSubmit = (data: any) => console.log(data);
+  const formSubmit = useSubmit();
 
+  const onSubmit = (data: any) => {
+      formSubmit(data, { action: '/signup', method: 'post' })
+  }
 
     return (
         <Centered>
@@ -38,7 +41,7 @@ export default function SignUp() {
                 <Heading as="h2" size="lg" color="gray.500">Get stuff done.</Heading>
             </VStack>
 
-            <VStack action="/auth/signup" method="post" as={Form} align="stretch" spacing="2rem" padding="1rem" width="100%" maxWidth="400px" onSubmit={() => handleSubmit(onSubmit)}>
+            <VStack as={Form} align="stretch" spacing="2rem" padding="1rem" width="100%" maxWidth="400px" onSubmit={handleSubmit(onSubmit)}>
                 <Text align="center" fontSize="xl">Sign up</Text>
 
                 <Input {...register('name')} errorMessage={errors?.name?.message} placeholder="Your name" type="text" label="Name" name="name" />
