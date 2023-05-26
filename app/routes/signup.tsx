@@ -19,8 +19,6 @@ export async function action({ request }: ActionArgs) {
   const form = await request.formData();
   const [name, email, password, passwordConfirmation] = ['name', 'email', 'password', 'passwordConfirmation'].map(formFieldName => form.get(formFieldName));
 
-console.log('inside action', { name, email, password, passwordConfirmation})
-
   return null;
 }
 export default function SignUp() {
