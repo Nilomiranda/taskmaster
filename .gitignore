@@ -4,4 +4,10 @@ node_modules
 /build
 /public/build
 .env
+/.idea/.gitignore
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/taskmaster.iml
+/.idea/vcs.xml
 .DS_Store
