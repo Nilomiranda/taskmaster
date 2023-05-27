@@ -6,6 +6,9 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import type {ActionArgs} from "@remix-run/node";
+import type { CreateUserDto} from "~/api/user/create.server";
+import {createUser} from "~/api/user/create.server";
+import {redirect} from "@remix-run/node";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -17,19 +20,37 @@ const validationSchema = yup.object().shape({
 })
 export async function action({ request }: ActionArgs) {
   const form = await request.formData();
-  const [name, email, password, passwordConfirmation] = ['name', 'email', 'password', 'passwordConfirmation'].map(formFieldName => form.get(formFieldName));
+  const [
+      name,
+      email,
+      password,
+  ] = ['name', 'email', 'password'].map(formFieldName => form.get(formFieldName));
 
-  return null;
+  const user: CreateUserDto = {
+      name: String(name),
+      email: String(email),
+      password: String(password),
+  }
+
+  try {
+      await createUser(user);
+
+      return redirect('/home')
+  } catch (err) {
+      console.error('Error creating user', err);
+
+      return null
+  }
 }
 export default function SignUp() {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm<CreateUserDto & { passwordConfirmation: string }>({
     resolver: yupResolver(validationSchema)
   });
 
   const formSubmit = useSubmit();
 
-  const onSubmit = (data: any) => {
-      formSubmit(data, { action: '/signup', method: 'post' })
+  const onSubmit = (data: CreateUserDto) => {
+      formSubmit(data as unknown as Record<string, string>, { action: '/signup', method: 'post' })
   }
 
     return (
