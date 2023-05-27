@@ -15,18 +15,13 @@ const validationSchema = yup.object().shape({
 })
 
 export async function loader({ request }: LoaderArgs) {
-  console.log('login loader')
   const session = await getSession(request.headers.get('Cookie'));
-
-  console.log({ session })
 
   if (session.has('userId')) {
     return redirect('/home')
   }
 
   const data = { error: session.get('error') }
-
-  console.log({ data })
 
   return json(data, {
     headers: {

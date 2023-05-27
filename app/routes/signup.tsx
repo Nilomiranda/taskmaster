@@ -9,6 +9,8 @@ import type {ActionArgs} from "@remix-run/node";
 import type { CreateUserDto} from "~/api/user/create.server";
 import {createUser} from "~/api/user/create.server";
 import {redirect} from "@remix-run/node";
+import {commitSession, getSession} from "~/sessions";
+import {User} from "@prisma/client";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -19,6 +21,9 @@ const validationSchema = yup.object().shape({
   })
 })
 export async function action({ request }: ActionArgs) {
+  const session = await getSession(request.headers.get('Cookie'));
+  console.log({ session })
+
   const form = await request.formData();
   const [
       name,
@@ -33,9 +38,15 @@ export async function action({ request }: ActionArgs) {
   }
 
   try {
-      await createUser(user);
+      const createdUser = await createUser(user);
+      const { id } = createdUser
+      session.set('userId', id)
 
-      return redirect('/home')
+      return redirect('/home', {
+          headers: {
+              'Set-Cookie': await commitSession(session)
+          }
+      })
   } catch (err) {
       console.error('Error creating user', err);
 
