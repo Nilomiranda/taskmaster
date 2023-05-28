@@ -8,9 +8,9 @@ import * as yup from "yup";
 import type {ActionArgs} from "@remix-run/node";
 import type { CreateUserDto} from "~/api/user/create.server";
 import {createUser} from "~/api/user/create.server";
-import {redirect} from "@remix-run/node";
+import {LoaderArgs, redirect} from "@remix-run/node";
 import {commitSession, getSession} from "~/sessions";
-import {User} from "@prisma/client";
+import {checkSessionAndRedirect} from "~/api/session/sesssion.server";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -20,9 +20,12 @@ const validationSchema = yup.object().shape({
     return this.parent.password === value;
   })
 })
+
+export async function loader({ request }: LoaderArgs) {
+    return checkSessionAndRedirect(request);
+}
 export async function action({ request }: ActionArgs) {
   const session = await getSession(request.headers.get('Cookie'));
-  console.log({ session })
 
   const form = await request.formData();
   const [

@@ -1,4 +1,4 @@
-import { Button, Heading, Text, VStack, Input as CInput } from "@chakra-ui/react";
+import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { Link, Form } from "@remix-run/react";
 import Input from "~/components/form/Input";
 import Centered from "~/components/layout/Centered";
@@ -6,8 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import type {LoaderArgs} from "@remix-run/node";
-import {commitSession, getSession} from "~/sessions";
-import {json, redirect} from "@remix-run/node";
+import {checkSessionAndRedirect} from "~/api/session/sesssion.server";
 
 const validationSchema = yup.object().shape({
     email: yup.string().email('Invalid email').required('Email is required'),
@@ -15,21 +14,7 @@ const validationSchema = yup.object().shape({
 })
 
 export async function loader({ request }: LoaderArgs) {
-  const session = await getSession(request.headers.get('Cookie'));
-
-  if (session.has('userId')) {
-    return redirect('/home')
-  }
-
-  const data = { error: session.get('error') }
-
-  return json(data, {
-    headers: {
-      'Set-Cookie': await commitSession(session),
-    }
-  })
-
-  return null
+    return checkSessionAndRedirect(request);
 }
 export default function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm({
