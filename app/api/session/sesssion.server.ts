@@ -15,15 +15,11 @@ export async function checkSessionAndRedirect(request: Request) {
         return redirect('/home')
     }
 
-    const data = { error: session.get('error') }
-
-    return json(data, {
+    return redirect(request.url, {
         headers: {
             'Set-Cookie': await commitSession(session),
         }
     })
-
-    return null
 }
 
 export async function createSession(request: Request, payload: CreateSessionPayload) {

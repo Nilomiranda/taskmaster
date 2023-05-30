@@ -1,4 +1,4 @@
-import {json, redirect} from "@remix-run/node";
+import {redirect} from "@remix-run/node";
 import { prisma } from "~/db/prismaClient";
 import * as bcrypt from 'bcryptjs'
 import {commitSession, getSession} from "~/sessions";
