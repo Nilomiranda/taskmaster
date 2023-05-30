@@ -9,7 +9,7 @@ import type {ActionArgs} from "@remix-run/node";
 import type { CreateUserDto} from "~/api/user/create.server";
 import {createUserAndSaveSession} from "~/api/user/create.server";
 import {LoaderArgs, redirect} from "@remix-run/node";
-import {commitSession, getSession} from "~/sessions";
+import {getSession} from "~/sessions";
 import {checkSessionAndRedirect} from "~/api/session/sesssion.server";
 import {useEffect} from "react";
 
@@ -26,8 +26,6 @@ export async function loader({ request }: LoaderArgs) {
     return checkSessionAndRedirect(request);
 }
 export async function action({ request }: ActionArgs) {
-  const session = await getSession(request.headers.get('Cookie'));
-
   const form = await request.formData();
   const [
       name,
@@ -36,15 +34,13 @@ export async function action({ request }: ActionArgs) {
   ] = ['name', 'email', 'password'].map(formFieldName => form.get(formFieldName));
 
   try {
-      await createUserAndSaveSession(request, {
+      return createUserAndSaveSession(request, {
           name: String(name),
           email: String(email),
           password: String(password),
       })
   } catch (err: any) {
-      const errorMessage = await err?.json();
-
-      return redirect(`/signup?error=${errorMessage}`)
+      return redirect('/signup?error=Unexpected error')
   }
 }
 export default function SignUp() {

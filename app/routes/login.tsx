@@ -27,11 +27,9 @@ export async function action({ request }: ActionArgs) {
     ] = ['email', 'password'].map(formFieldName => form.get(formFieldName));
 
     try {
-        await createSession(request, { email: String(email), password: String(password) })
+        return createSession(request, { email: String(email), password: String(password) });
     } catch (err: any) {
-        const errorMessage = await err?.json();
-
-        return redirect(`/login?error=${errorMessage}`)
+        return redirect('/login?error=Unexpected error')
     }
 }
 export default function Login() {

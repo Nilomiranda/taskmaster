@@ -38,7 +38,7 @@ export async function createSession(request: Request, payload: CreateSessionPayl
     });
 
     if (!user) {
-        throw json('Wrong credentials', { status: 401 })
+        return redirect('/login?error=Wrong credentials')
     }
 
     const { password: hashedPassword } = user;
@@ -46,7 +46,7 @@ export async function createSession(request: Request, payload: CreateSessionPayl
     const isPasswordValid = await brcrypt.compare(password, hashedPassword);
 
     if (!isPasswordValid) {
-        throw json('Wrong credentials', { status: 401 })
+        return redirect('/login?error=Wrong credentials')
     }
 
     const { id } = user;

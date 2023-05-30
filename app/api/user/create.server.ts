@@ -20,7 +20,7 @@ export async function createUserAndSaveSession(request: Request, data: CreateUse
     }))
 
     if (isEmailInUse) {
-        throw json('Email is already in use', { status: 409 })
+        return redirect('/signup?error=Email already in use')
     }
 
     const createdUser = await prisma.user.create({
