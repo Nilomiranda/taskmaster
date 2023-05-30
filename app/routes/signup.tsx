@@ -1,5 +1,5 @@
-import { Button, Heading, Text, VStack } from "@chakra-ui/react";
-import { Link, Form, useSubmit } from "@remix-run/react";
+import {Button, Heading, Text, useToast, VStack} from "@chakra-ui/react";
+import {Link, Form, useSubmit, useSearchParams} from "@remix-run/react";
 import Input from "~/components/form/Input";
 import Centered from "~/components/layout/Centered";
 import {useForm} from "react-hook-form";
@@ -11,6 +11,7 @@ import {createUser} from "~/api/user/create.server";
 import {LoaderArgs, redirect} from "@remix-run/node";
 import {commitSession, getSession} from "~/sessions";
 import {checkSessionAndRedirect} from "~/api/session/sesssion.server";
+import {useEffect} from "react";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
@@ -42,7 +43,7 @@ export async function action({ request }: ActionArgs) {
 
   try {
       const createdUser = await createUser(user);
-      const { id } = createdUser
+      const { id } = createdUser;
       session.set('userId', id)
 
       return redirect('/home', {
@@ -50,13 +51,17 @@ export async function action({ request }: ActionArgs) {
               'Set-Cookie': await commitSession(session)
           }
       })
-  } catch (err) {
-      console.error('Error creating user', err);
+  } catch (err: any) {
+      const errorMessage = await err?.json();
 
-      return null
+      return redirect(`/signup?error=${errorMessage}`)
   }
 }
 export default function SignUp() {
+    const toast = useToast();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const error = searchParams.get('error')
+
   const { register, handleSubmit, formState: { errors } } = useForm<CreateUserDto & { passwordConfirmation: string }>({
     resolver: yupResolver(validationSchema)
   });
@@ -66,6 +71,21 @@ export default function SignUp() {
   const onSubmit = (data: CreateUserDto) => {
       formSubmit(data as unknown as Record<string, string>, { action: '/signup', method: 'post' })
   }
+
+  useEffect(() => {
+      if (error) {
+          toast({
+              title: 'Error creating account',
+              description: error,
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+          })
+
+          searchParams.delete('error')
+          setSearchParams(searchParams)
+      }
+  }, [toast, error, searchParams, setSearchParams])
 
     return (
         <Centered>

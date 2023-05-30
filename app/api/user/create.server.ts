@@ -17,7 +17,7 @@ export async function createUser(data: CreateUserDto) {
     }))
 
     if (isEmailInUse) {
-        return json({ error: "Email is already in use"}, { status: 400 })
+        throw json('Email is already in use', { status: 409 })
     }
 
     return prisma.user.create({
