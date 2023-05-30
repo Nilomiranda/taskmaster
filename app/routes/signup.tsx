@@ -7,7 +7,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import type {ActionArgs} from "@remix-run/node";
 import type { CreateUserDto} from "~/api/user/create.server";
-import {createUser} from "~/api/user/create.server";
+import {createUserAndSaveSession} from "~/api/user/create.server";
 import {LoaderArgs, redirect} from "@remix-run/node";
 import {commitSession, getSession} from "~/sessions";
 import {checkSessionAndRedirect} from "~/api/session/sesssion.server";
@@ -35,21 +35,11 @@ export async function action({ request }: ActionArgs) {
       password,
   ] = ['name', 'email', 'password'].map(formFieldName => form.get(formFieldName));
 
-  const user: CreateUserDto = {
-      name: String(name),
-      email: String(email),
-      password: String(password),
-  }
-
   try {
-      const createdUser = await createUser(user);
-      const { id } = createdUser;
-      session.set('userId', id)
-
-      return redirect('/home', {
-          headers: {
-              'Set-Cookie': await commitSession(session)
-          }
+      await createUserAndSaveSession(request, {
+          name: String(name),
+          email: String(email),
+          password: String(password),
       })
   } catch (err: any) {
       const errorMessage = await err?.json();
