@@ -12,7 +12,7 @@ export default function HorizontalNavBar() {
                         <Link to="/account">My account</Link>
                     </MenuItem>
                     <MenuItem>
-                        <Link to="/login">Sign out</Link>
+                        <Link to="/logout">Sign out</Link>
                     </MenuItem>
                 </MenuList>
             </Menu>
