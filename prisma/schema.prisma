@@ -1,6 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-// about schema and data model: https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
+// about schema and data model https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
 
 generator client {
   provider = "prisma-client-js"
