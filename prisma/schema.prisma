@@ -1,5 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// about schema and data model: https://www.prisma.io/docs/concepts/components/prisma-schema/data-model
 
 generator client {
   provider = "prisma-client-js"
@@ -11,10 +12,43 @@ datasource db {
 }
 
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  email     String    @unique
+  password  String
+  name      String
+  tasks     Task[]
+  taskTags  TaskTag[]
+}
+
+model Task {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  name        String
+  description String?
+  status      TaskStatus
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String     @db.ObjectId
+  tagsIDs     String[]   @db.ObjectId
+  tags        TaskTag[]  @relation(fields: [tagsIDs], references: [id])
+}
+
+enum TaskStatus {
+  ONGOING
+  CRITICAL
+  COMPLETED
+}
+
+model TaskTag {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  email String @unique
-  password String
-  name String
+  name      String
+  color     String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  tasks     Task[]   @relation(fields: [taskIDs], references: [id])
+  taskIDs   String[] @db.ObjectId
 }
