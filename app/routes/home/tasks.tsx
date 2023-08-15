@@ -8,27 +8,20 @@ import TasksList from "~/components/tasks/TasksList";
 import {loadCurrentUser} from "~/api/user/user.server";
 import {ActionArgs, json, redirect} from "@remix-run/node";
 import type { LoaderArgs } from "@remix-run/node"
-import {useLoaderData, useSearchParams} from "@remix-run/react";
+import {useActionData, useLoaderData, useSearchParams} from "@remix-run/react";
 import type {User} from ".prisma/client";
 import {AddIcon} from "@chakra-ui/icons";
 import {useEffect, useState} from "react";
 import NewTasksModal from "~/components/tasks/NewTaskModal";
-import {createSession} from "~/api/session/sesssion.server";
-import {createTask} from "~/api/task/task.server";
-
-// const tasks: Task[] = [
-//     { name: 'First example', description: 'This is the first tasks that will serve as an example', tags: [{ name: 'Testing', color: '#ffffff' }, { name: 'Testing2', color: '#00aaff' }], status: 'completed' },
-//     { name: 'First example', description: 'This is the first tasks that will serve as an example', tags: [], status: 'ongoing' },
-//     { name: 'First example', description: 'This is the first tasks that will serve as an example', tags: [], status: 'critical' },
-//     { name: 'First example', description: 'This is the first tasks that will serve as an example', tags: [], status: 'completed' },
-//     { name: 'First example', description: 'This is the first tasks that will serve as an example', tags: [], status: 'completed' },
-// ]
+import {createTask, loadTasks} from "~/api/task/task.server";
+import {Task} from "~/interfaces/task";
 
 export async function loader({ request }: LoaderArgs) {
     const user = await loadCurrentUser(request);
 
     return json({
-        user
+        user,
+        tasks: await loadTasks(request),
     })
 }
 
@@ -40,16 +33,23 @@ export async function action({ request }: ActionArgs) {
     ] = ['name', 'description'].map(formFieldName => form.get(formFieldName));
 
     try {
-        return createTask(request, { name: String(name), description: String(description ?? '') })
+        await createTask(request, { name: String(name), description: String(description ?? '') })
+
+        return json({
+            tasks: await loadTasks(request),
+        })
     } catch (err: any) {
         return redirect('/login?error=Unexpected error')
     }
 }
 
 export default function TasksPage() {
-    const { user } = useLoaderData<{ user: User }>();
+    const { user, tasks: existingTasks } = useLoaderData<{ user: User, tasks: Task[] }>();
+    const { tasks: refetchedTasks } = useActionData<{ tasks: Task[] }>() || { tasks: null };
     const [searchParams, setSearchParams] = useSearchParams();
     const [isNewTaskFormOpen, setIsNewTaskFormOpen] = useState(false)
+
+    const tasks = refetchedTasks ? [...refetchedTasks] : [...(existingTasks || [])]
 
     useEffect(() => {
         const action = searchParams.get('action');
@@ -81,7 +81,7 @@ export default function TasksPage() {
                 <Button onClick={handleOpenCreateTaskFormClick} alignSelf="end" display="flex" alignItems="center" fontSize="14px"><AddIcon mr="8px" /> New task</Button>
             </VStack>
 
-            <TasksList tasks={[]} />
+            <TasksList tasks={tasks} />
 
             <NewTasksModal isOpen={isNewTaskFormOpen} onClose={handleTaskModalClosed} />
         </VStack>

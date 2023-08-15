@@ -3,10 +3,8 @@ import { HStack, Tag, Text, VStack, Modal,
     ModalOverlay,
     ModalContent,
     ModalHeader,
-    ModalFooter,
     ModalBody,
-    ModalCloseButton,
-    Button, } from "@chakra-ui/react";
+    ModalCloseButton } from "@chakra-ui/react";
 import { useSearchParams } from "@remix-run/react";
 import { ReactNode, useEffect, useState } from "react";
 import { Task, TaskStatus } from "~/interfaces/task";
@@ -16,9 +14,9 @@ interface TaskItemProps {
 }
 
 const mapStatusToTagColor: Record<TaskStatus, Record<'color' | 'background' | 'icon', string | ReactNode>> = {
-    'completed': { color: '#00FF00', background: '#00FF0026', icon: <CheckCircleIcon mr="0.5rem" /> },
-    'ongoing': { color: '#FFFF00', background: '#FFFF0026', icon: <InfoIcon mr="0.5rem" /> },
-    'critical': { color: '#FF0000', background: '#FF000026', icon: <WarningTwoIcon mr="0.5rem" /> },
+    [TaskStatus.COMPLETED]: { color: '#00FF00', background: '#00FF0026', icon: <CheckCircleIcon mr="0.5rem" /> },
+    [TaskStatus.ONGOING]: { color: '#FFFF00', background: '#FFFF0026', icon: <InfoIcon mr="0.5rem" /> },
+    [TaskStatus.CRITICAL]: { color: '#FF0000', background: '#FF000026', icon: <WarningTwoIcon mr="0.5rem" /> },
 }
 
 export default function TaskItem({ task }: TaskItemProps) {
