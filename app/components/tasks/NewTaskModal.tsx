@@ -13,7 +13,7 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Textarea from "~/components/form/Textarea";
-import {Form} from "@remix-run/react";
+import {Form, useSubmit} from "@remix-run/react";
 
 type NewTasksModalProps = {
     isOpen: boolean
@@ -21,14 +21,19 @@ type NewTasksModalProps = {
 }
 
 const validationSchema = yup.object().shape({
-    email: yup.string().required('Title is required'),
-    description: yup.string().required('Description is required')
+    name: yup.string().required('Name is required'),
+    description: yup.string(),
 })
 
 export default function NewTasksModal({ isOpen, onClose }: NewTasksModalProps) {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(validationSchema)
     });
+
+    const formSubmit = useSubmit();
+    const onSubmit = (data: any) => {
+        formSubmit(data as unknown as Record<string, string>, { action: '/home/tasks', method: 'post' })
+    };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -39,8 +44,8 @@ export default function NewTasksModal({ isOpen, onClose }: NewTasksModalProps) {
                 <ModalHeader>Create task</ModalHeader>
 
                 <ModalBody w="100%">
-                    <VStack w="100%" alignItems="stretch" as={Form} rowGap="24px">
-                        <Input {...register('title')} errorMessage={errors.title?.message} id="title" label="Title" placeholder="Check reinbursement with accounting services" />
+                    <VStack w="100%" alignItems="stretch" as={Form} rowGap="24px" onSubmit={handleSubmit(onSubmit)}>
+                        <Input {...register('name')} errorMessage={errors.name?.message} id="name" label="Name" placeholder="Check reinbursement with accounting services" />
 
                         <Textarea label="Description" errorMessage={errors.description?.message} placeholder="Give a brief description of this task" {...register('description')} />
 

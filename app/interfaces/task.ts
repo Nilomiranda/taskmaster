@@ -1,6 +1,10 @@
 import { Tag } from "./tag";
 
-export type TaskStatus = 'completed' | 'ongoing' | 'critical'
+export enum TaskStatus {
+    COMPLETED = 'COMPLETED',
+    ONGOING = 'ONGOING',
+    CRITICAL = 'CRITICAL'
+}
 
 export interface Task {
     name: string;
