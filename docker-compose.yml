@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+  mongo:
+    build: ./mongodb_rs
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: db
+      MONGO_REPLICA_HOST: localhost
+      MONGO_REPLICA_PORT: "27017"
+    ports:
+      - "27017:27017"
+
+
+
+
+  # might not be needed since db can be accessed using mongodb compass
+#  mongo-express:
+#    image: mongo-express
+#    restart: always
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+#      ME_CONFIG_MONGODB_ADMIN_PASSWORD: root
+#      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
